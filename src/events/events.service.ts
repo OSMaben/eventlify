@@ -98,13 +98,40 @@ export class EventsService {
 
 
 
+  async FindAllParticipantsOfEvent(eventId: string): Promise<{ users: any[] }> {
+    try {
+      const findEvent = await this.eventModel
+          .findById(eventId)
+          .populate({
+            path: 'users', // Populate the 'users' field
+            model: 'User',
+            select: 'username email phone', // Fetch only name and email
+          });
+
+      if (!findEvent) {
+        throw new NotFoundException('Event with ID does not exist');
+      }
+
+      return {
+        users: findEvent.users,
+      };
+    } catch (err) {
+      throw new Error(`Error fetching participants: ${err.message}`);
+    }
+  }
+
+
+
+
+
+
   async removeParticipantsFromEvent(eventId: string, eventParticipant: string): Promise<Event> {
     try {
       const participantObjectId = new Types.ObjectId(eventParticipant);
 
       const updatedEvent = await this.eventModel.findByIdAndUpdate(
           eventId,
-          { $pull: { users: participantObjectId } }, // Ensure the type matches
+          { $pull: { users: participantObjectId } },
           { new: true } // Return the updated document
       ).exec();
 
@@ -117,4 +144,5 @@ export class EventsService {
       throw error;
     }
   }
+
 }

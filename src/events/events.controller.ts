@@ -44,14 +44,21 @@ export class EventsController {
 
 
 
-  @Post(':id/participants')
+  @Post(':id/participants/:idUser')
   @UseGuards(JwtAuthGuard, JwtValidator)
-  addParticipant(@Param('id') eventId: string, @Body() createUserDto: CreateUserDto) {
+  addParticipant(@Param('id') eventId: string, @Param('idUser') createUserDto: CreateUserDto) {
     return this.eventsService.addParticepants(eventId,createUserDto);
   }
 
-  @Post('RemoveParticipants')
-  removeParticipantsFromEvent(@Body('id') eventId: string, participantId: string) {
+  @Delete(':idEvent/RemoveParticipants/:idParti')
+  removeParticipantsFromEvent(@Param('idEvent') eventId: string, @Param('idParti') participantId: string) {
     return this.eventsService.removeParticipantsFromEvent(eventId, participantId);
   }
+
+  @Get('/MembersEvents/:id')
+  @UseGuards(JwtAuthGuard, JwtValidator)
+  FindAllParticipantsOfEvent(@Param('id') eventId: string) {
+    return this.eventsService.FindAllParticipantsOfEvent(eventId);
+  }
+
 }

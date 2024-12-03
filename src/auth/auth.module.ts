@@ -13,7 +13,7 @@ import {JwtValidator} from "../Middlewares/jwt.validator";
     PassportModule,
     JwtModule.register({
       secret: '@kf)$gh><0212', // Make sure to replace with a proper secret
-      signOptions: { expiresIn: '60m' }, // Customize the expiration time if needed
+      signOptions: { expiresIn: '100m' }, // Customize the expiration time if needed
     }),
   ],
 
